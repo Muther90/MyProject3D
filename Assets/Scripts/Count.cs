@@ -5,7 +5,7 @@ using System.Collections;
 public class Count : MonoBehaviour
 {
     [SerializeField] private float _startCount;
-    [SerializeField] private Text _ñountText;
+    [SerializeField] private Text _countText;
     [SerializeField] private float _stepIncreaseCounter;
     [SerializeField] private float _updateInterval;
 
@@ -15,7 +15,7 @@ public class Count : MonoBehaviour
     private void Start()
     {
         _currentCount = _startCount;
-        _ñountText.text = _currentCount.ToString();
+        _countText.text = _currentCount.ToString();
     }
 
     private void Update()
@@ -52,12 +52,12 @@ public class Count : MonoBehaviour
 
     private IEnumerator CountCoroutine()
     {
-        float previousValue = float.Parse(_ñountText.text);
+        float previousValue = float.Parse(_countText.text);
 
         while (_isCounterRunning)
         {
             _currentCount += _stepIncreaseCounter;
-            _ñountText.text = _currentCount.ToString();
+            _countText.text = _currentCount.ToString();
 
             yield return new WaitForSeconds(_updateInterval);
         }
