@@ -621,9 +621,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _startCount: 0
-  "_\u0441ountText": {fileID: 1091560119}
-  _stepIncreaseCounter: 0.5
-  _updateInterval: 1
+  _countText: {fileID: 1091560119}
+  _stepIncreaseCounter: 1
+  _updateInterval: 0.5
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

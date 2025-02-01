@@ -2,20 +2,23 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
-public class Count : MonoBehaviour
+public class Counter : MonoBehaviour
 {
     [SerializeField] private float _startCount;
-    [SerializeField] private Text _countText;
     [SerializeField] private float _stepIncreaseCounter;
     [SerializeField] private float _updateInterval;
+    [SerializeField] private CounterView _counterView;
 
     private bool _isCounterRunning = false;
     private float _currentCount;
+    private Coroutine _counterCoroutine;
+    private WaitForSeconds _waitForSeconds;
 
     private void Start()
     {
         _currentCount = _startCount;
-        _countText.text = _currentCount.ToString();
+        _counterView.UpdateCountText(_currentCount);
+        _waitForSeconds = new WaitForSeconds(_updateInterval);
     }
 
     private void Update()
@@ -41,25 +44,23 @@ public class Count : MonoBehaviour
     private void StartCounter()
     {
         _isCounterRunning = true;
-        StartCoroutine(CountCoroutine());
+        _counterCoroutine = StartCoroutine(CounterCoroutine());
     }
 
     private void StopCounter()
     {
         _isCounterRunning = false;
-        StopCoroutine(CountCoroutine());
+        StopCoroutine(_counterCoroutine);
     }
 
-    private IEnumerator CountCoroutine()
+    private IEnumerator CounterCoroutine()
     {
-        float previousValue = float.Parse(_countText.text);
-
         while (_isCounterRunning)
         {
             _currentCount += _stepIncreaseCounter;
-            _countText.text = _currentCount.ToString();
+            _counterView.UpdateCountText(_currentCount);
 
-            yield return new WaitForSeconds(_updateInterval);
+            yield return _waitForSeconds;
         }
     }
 }
