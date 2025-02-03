@@ -1,13 +1,13 @@
 using UnityEngine;
-using UnityEngine.UI;
 using System.Collections;
 
 public class Counter : MonoBehaviour
 {
+    public event System.Action<float> CountChanged;
+
     [SerializeField] private float _startCount;
-    [SerializeField] private float _stepIncreaseCounter;
+    [SerializeField] private float _stepIncreaseCount;
     [SerializeField] private float _updateInterval;
-    [SerializeField] private CounterView _counterView;
 
     private bool _isCounterRunning = false;
     private float _currentCount;
@@ -17,7 +17,7 @@ public class Counter : MonoBehaviour
     private void Start()
     {
         _currentCount = _startCount;
-        _counterView.UpdateCountText(_currentCount);
+        CountChanged.Invoke(_currentCount);
         _waitForSeconds = new WaitForSeconds(_updateInterval);
     }
 
@@ -57,8 +57,7 @@ public class Counter : MonoBehaviour
     {
         while (_isCounterRunning)
         {
-            _currentCount += _stepIncreaseCounter;
-            _counterView.UpdateCountText(_currentCount);
+            CountChanged.Invoke(_currentCount += _stepIncreaseCount);
 
             yield return _waitForSeconds;
         }
