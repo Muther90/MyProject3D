@@ -1,0 +1,104 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "E:\\Unity projects\\MyProject3D\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{FD3C423C-847C-940E-57E8-7AD2E008322F}|Assembly-CSharp.csproj|E:\\Unity projects\\MyProject3D\\assets\\scripts\\router.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FD3C423C-847C-940E-57E8-7AD2E008322F}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\router.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FD3C423C-847C-940E-57E8-7AD2E008322F}|Assembly-CSharp.csproj|E:\\Unity projects\\MyProject3D\\assets\\scripts\\trigger.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FD3C423C-847C-940E-57E8-7AD2E008322F}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\trigger.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FD3C423C-847C-940E-57E8-7AD2E008322F}|Assembly-CSharp.csproj|e:\\unity projects\\myproject3d\\assets\\scripts\\housesecurity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FD3C423C-847C-940E-57E8-7AD2E008322F}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\housesecurity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FD3C423C-847C-940E-57E8-7AD2E008322F}|Assembly-CSharp.csproj|E:\\Unity projects\\MyProject3D\\assets\\scripts\\alarm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FD3C423C-847C-940E-57E8-7AD2E008322F}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\alarm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FD3C423C-847C-940E-57E8-7AD2E008322F}|Assembly-CSharp.csproj|E:\\Unity projects\\MyProject3D\\assets\\scripts\\mover.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FD3C423C-847C-940E-57E8-7AD2E008322F}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\mover.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Trigger.cs",
+              "DocumentMoniker": "E:\\Unity projects\\MyProject3D\\Assets\\Scripts\\Trigger.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Trigger.cs",
+              "ToolTip": "E:\\Unity projects\\MyProject3D\\Assets\\Scripts\\Trigger.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Trigger.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-21T10:40:09.865Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "HouseSecurity.cs",
+              "DocumentMoniker": "E:\\Unity projects\\MyProject3D\\Assets\\Scripts\\HouseSecurity.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\HouseSecurity.cs",
+              "ToolTip": "E:\\Unity projects\\MyProject3D\\Assets\\Scripts\\HouseSecurity.cs",
+              "RelativeToolTip": "Assets\\Scripts\\HouseSecurity.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-21T12:41:02.544Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Alarm.cs",
+              "DocumentMoniker": "E:\\Unity projects\\MyProject3D\\Assets\\Scripts\\Alarm.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Alarm.cs",
+              "ToolTip": "E:\\Unity projects\\MyProject3D\\Assets\\Scripts\\Alarm.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Alarm.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-20T12:45:43.701Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Router.cs",
+              "DocumentMoniker": "E:\\Unity projects\\MyProject3D\\Assets\\Scripts\\Router.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Router.cs",
+              "ToolTip": "E:\\Unity projects\\MyProject3D\\Assets\\Scripts\\Router.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Router.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-20T07:48:30.945Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Mover.cs",
+              "DocumentMoniker": "E:\\Unity projects\\MyProject3D\\Assets\\Scripts\\Mover.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Mover.cs",
+              "ToolTip": "E:\\Unity projects\\MyProject3D\\Assets\\Scripts\\Mover.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Mover.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAQwAEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-19T13:05:57.715Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
