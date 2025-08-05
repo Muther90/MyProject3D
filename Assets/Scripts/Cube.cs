@@ -8,20 +8,15 @@ public class Cube : MonoBehaviour, ISpawnable
     [SerializeField] private int _minTimeOfLife;
     [SerializeField] private int _maxTimeOfLife;
 
-    private BombSpawner _bombSpawner;
     private RendererController _rendererController;
     private Coroutine _destructionCoroutine;
 
     public event Action<ISpawnable> Taken;
+    public event Action<Vector3> BombRequested;
 
     private void Awake()
     {
         _rendererController = GetComponent<RendererController>();
-    }
-
-    public void Initialize(BombSpawner bombSpawner)
-    {
-        _bombSpawner = bombSpawner;
     }
 
     public void OnPlatformCollision()
@@ -38,7 +33,7 @@ public class Cube : MonoBehaviour, ISpawnable
 
         yield return Timer.WaitSeconds(UnityEngine.Random.Range(_minTimeOfLife, _maxTimeOfLife));
 
-        _bombSpawner.Spawn(this.transform.position, Quaternion.identity);
+        BombRequested?.Invoke(this.transform.position);
         Taken?.Invoke(this);
         _destructionCoroutine = null;
     }

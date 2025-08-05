@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class BombSpawner : SpawnerBase<Bomb>
+public class BombSpawner : SpawnerBase<Bomb> , ISpawnerStats
 {
     public event Action<int, int> OnStateUpdated;
 
