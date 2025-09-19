@@ -17,19 +17,6 @@ public class Mover : MonoBehaviour
 
     public IEnumerator MoveTo(Vector3 targetPosition)
     {
-        if (_moveCoroutine != null)
-        {
-            StopCoroutine(_moveCoroutine);
-            _rigidbody.velocity = new Vector3(0, _rigidbody.velocity.y, 0);
-        }
-
-        _moveCoroutine = StartCoroutine(MoveCoroutine(targetPosition));
-
-        yield return _moveCoroutine;
-    }
-
-    private IEnumerator MoveCoroutine(Vector3 targetPosition)
-    {
         while ((transform.position - targetPosition).sqrMagnitude > _distanceToTarget * _distanceToTarget)
         {
             Vector3 direction = (targetPosition - transform.position).normalized;
@@ -47,7 +34,6 @@ public class Mover : MonoBehaviour
             yield return null;
         }
 
-        _rigidbody.velocity = new Vector3(0, _rigidbody.velocity.y, 0);
-        _moveCoroutine = null;
+        _rigidbody.velocity = Vector3.zero;
     }
 }

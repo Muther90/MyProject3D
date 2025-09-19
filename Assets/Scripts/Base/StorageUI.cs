@@ -3,7 +3,7 @@ using TMPro;
 
 public class StorageUI : MonoBehaviour
 {
-    [SerializeField] private Storage _storage;
+    [SerializeField] private ResourceStorage _storage;
     [SerializeField] private TextMeshProUGUI _resourceCountValueText;
 
     private void OnEnable()

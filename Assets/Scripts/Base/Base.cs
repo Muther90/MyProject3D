@@ -3,32 +3,55 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+[RequireComponent(typeof(ResourceStorage))]
 public class Base : MonoBehaviour
 {
-    [SerializeField] private float _radius;
-    [SerializeField] private float _delay;
-    [SerializeField] private Transform _storageResources;
+    [SerializeField] private GlobalStorage _globalStorage;
     [SerializeField] private List<Worker> _workers;
+    [SerializeField] private WorkerRetriever _workerRetriever;
+    [SerializeField] private float _delay;
 
+    private ResourceStorage _resourceStorage;
+    private Vector3 _positionWorkerRetriever;
     private Coroutine _workCoroutine;
-    private Vector3 _position;
     private Queue<Worker> _freeWorkers = new();
-    private Queue<Vector3> _positionsFoundResources = new();
+
+    private void Awake()
+    {
+        _resourceStorage = GetComponent<ResourceStorage>();
+        _positionWorkerRetriever = _workerRetriever.transform.position;
+    }
 
     private void Start()
     {
-        _position = _storageResources.position;
-        _workCoroutine = StartCoroutine(Work());
+        InitializeWorkers();
+        _workCoroutine = StartCoroutine(WorkCoroutine());
     }
 
-    private IEnumerator Work()
+    private void OnEnable()
+    {
+        _workerRetriever.WorkerArrived += ServeWorker;
+    }
+
+    private void OnDisable()
+    {
+        _workerRetriever.WorkerArrived -= ServeWorker;
+    }
+
+    private IEnumerator WorkCoroutine()
     {
         WaitForSeconds wait = new(_delay);
+        IResource foundResource;
 
         while (enabled)
         {
-            ScanResources();
-            AssignWorkers();
+            foundResource = _globalStorage.GetAvailableResource();
+
+            if (foundResource != null && _freeWorkers.Any())
+            {
+                Worker worker = _freeWorkers.Dequeue();
+                worker.CarryThing(foundResource, _positionWorkerRetriever);
+            }
 
             yield return wait;
         }
@@ -36,44 +59,24 @@ public class Base : MonoBehaviour
         _workCoroutine = null;
     }
 
-    private void ScanResources()
+    private void ServeWorker(Worker worker)
     {
-        _positionsFoundResources.Clear();
-        List<Collider> foundObjects = Scanner.Scan(_position, _radius);
+        IResource deliveredResource = worker.GiveResource();
 
-        foreach (Collider collider in foundObjects)
+        if (deliveredResource != null)
         {
-            if (collider.TryGetComponent<IResource>(out IResource resource))
-            {
-                if (resource.IsCarried == false)
-                {
-                    _positionsFoundResources.Enqueue(collider.transform.position);
-                }
-            }
+            _resourceStorage.AddResource();
+            deliveredResource.Reset();
+            _globalStorage.DeleteResource(deliveredResource);
+            _freeWorkers.Enqueue(worker);
         }
     }
 
-    private void AssignWorkers()
+    private void InitializeWorkers()
     {
-        UpdateFreeWorkers();
-
-        while (_freeWorkers.Any() && _positionsFoundResources.Any())
-        {
-            Worker worker = _freeWorkers.Dequeue();
-            worker.CarryThing(_positionsFoundResources.Dequeue(), _position);
-        }
-    }
-
-    private void UpdateFreeWorkers()
-    {
-        _freeWorkers.Clear();
-
         foreach (Worker worker in _workers)
         {
-            if (worker.IsBusy == false)
-            {
-                _freeWorkers.Enqueue(worker);
-            }
+            _freeWorkers.Enqueue(worker);
         }
     }
 
@@ -81,16 +84,7 @@ public class Base : MonoBehaviour
     [ContextMenu("Add Child Workers")]
     private void RefreshChildArray()
     {
-        _workers?.Clear();
-        _workers ??= new List<Worker>();
-
-        foreach (Transform child in transform)
-        {
-            if (child.TryGetComponent<Worker>(out Worker worker))
-            {
-                _workers.Add(worker);
-            }
-        }
+        _workers = new List<Worker>(GetComponentsInChildren<Worker>(true));
     }
 #endif
 }

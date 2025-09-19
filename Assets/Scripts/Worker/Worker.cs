@@ -4,37 +4,45 @@ using UnityEngine;
 public class Worker : MonoBehaviour
 {
     [SerializeField] private Mover _mover;
-    [SerializeField] private Collector _collector;
+    [SerializeField] private Transform _holdPoint;
 
     private Coroutine _taskCoroutine;
+    private IResource _backpuck;
 
-    public bool IsBusy { get; private set; }
-
-    public void CarryThing(Vector3 from, Vector3 target)
+    public void CarryThing(IResource resource, Vector3 target)
     {
         if (_taskCoroutine != null)
         {
             StopCoroutine(_taskCoroutine);
-            IsBusy = false;
+            _taskCoroutine = null;
         }
 
-        _taskCoroutine = StartCoroutine(CarryThingCoroutine(from, target));
+        _taskCoroutine = StartCoroutine(CarryResourceCoroutine(resource, target));
     }
 
-    private IEnumerator CarryThingCoroutine(Vector3 from, Vector3 target)
+    public IResource GiveResource()
     {
-        IsBusy = true;
-
-        yield return StartCoroutine(_mover.MoveTo(from));
-        _collector.TakeThing();
-
-        if (_collector.IsCarrying == true) 
+        if (_backpuck != null)
         {
-            yield return StartCoroutine(_mover.MoveTo(target));
-            _collector.DropThing();
+            IResource resourceToGive = _backpuck;
+            _backpuck.Drop();
+            _backpuck = null;
+
+            return resourceToGive;
         }
 
-        IsBusy = false;
+        return null;
+    }
+
+    private IEnumerator CarryResourceCoroutine(IResource resource, Vector3 target)
+    {
+        yield return _mover.MoveTo(resource.Position);
+
+        resource.PickUp(transform, _holdPoint);
+        _backpuck = resource;
+
+        yield return _mover.MoveTo(target);
+
         _taskCoroutine = null;
     }
 }

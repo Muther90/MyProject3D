@@ -8,9 +8,9 @@ public class Mineral : MonoBehaviour, IResource
 
     public event Action<IPoolObject> Taken;
 
-    public bool IsCarried { get; private set; }
+    public Vector3 Position => transform.position;
 
-    private void Start()
+    private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
     }
@@ -25,17 +25,14 @@ public class Mineral : MonoBehaviour, IResource
     {
         transform.SetParent(parent);
 
-        transform.localPosition = holdPoint.localPosition;
-        transform.localRotation = holdPoint.localRotation;
+        transform.SetLocalPositionAndRotation(holdPoint.localPosition, holdPoint.localRotation);
 
         _rigidbody.isKinematic = true;
-        IsCarried = true;
     }
 
     public void Drop()
     {
         transform.SetParent(null);
         _rigidbody.isKinematic = false;
-        IsCarried = false;
     }
 }
