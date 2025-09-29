@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-
 public class ResourceScanner : MonoBehaviour
 {
     [SerializeField] private float _radius;
@@ -42,5 +41,10 @@ public class ResourceScanner : MonoBehaviour
         }
 
         _scanCoroutine = null;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawWireSphere(_pointScan.position, _radius);
     }
 }

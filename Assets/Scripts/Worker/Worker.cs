@@ -11,13 +11,14 @@ public class Worker : MonoBehaviour
 
     public void CarryThing(IResource resource, Vector3 target)
     {
-        if (_taskCoroutine != null)
-        {
-            StopCoroutine(_taskCoroutine);
-            _taskCoroutine = null;
-        }
-
+        Stop();
         _taskCoroutine = StartCoroutine(CarryResourceCoroutine(resource, target));
+    }
+
+    public void BuildBase(Vector3 target, BaseCreator baseCreator)
+    {
+        Stop();
+        _taskCoroutine = StartCoroutine(BuildBaseCoroutine(target, baseCreator));
     }
 
     public IResource GiveResource()
@@ -44,5 +45,24 @@ public class Worker : MonoBehaviour
         yield return _mover.MoveTo(target);
 
         _taskCoroutine = null;
+    }
+
+    private IEnumerator BuildBaseCoroutine(Vector3 target, BaseCreator baseCreator)
+    {
+        yield return _mover.MoveTo(target);
+
+        Base newBase = baseCreator.Create(target);
+        newBase.AddWorker(this);
+
+        _taskCoroutine = null;
+    }
+
+    private void Stop()
+    {
+        if (_taskCoroutine != null)
+        {
+            StopCoroutine(_taskCoroutine);
+            _taskCoroutine = null;
+        }
     }
 }

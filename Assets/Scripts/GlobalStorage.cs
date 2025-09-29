@@ -3,18 +3,41 @@ using UnityEngine;
 
 public class GlobalStorage : MonoBehaviour
 {
-    [SerializeField] private ResourceScanner _resourceScanner;
-
+    private List<ResourceScanner> _resourceScanners = new();
     private readonly Dictionary<IResource, bool> _resources = new();
 
     private void OnEnable()
     {
-        _resourceScanner.ResourceFounded += AddFoundResource;
+        foreach (ResourceScanner resourceScanner in _resourceScanners)
+        {
+            resourceScanner.ResourceFounded += AddFoundResource;
+        }
     }
 
     private void OnDisable()
     {
-        _resourceScanner.ResourceFounded -= AddFoundResource;
+        foreach (ResourceScanner resourceScanner in _resourceScanners)
+        {
+            resourceScanner.ResourceFounded -= AddFoundResource;
+        }
+    }
+
+    public void AddResourceScanner(ResourceScanner resourceScanner)
+    {
+        if (resourceScanner != null && _resourceScanners.Contains(resourceScanner) == false)
+        {
+            resourceScanner.ResourceFounded += AddFoundResource;
+            _resourceScanners.Add(resourceScanner);
+        }
+    }
+
+    public void RemoveResourceScanner(ResourceScanner resourceScanner)
+    {
+        if (resourceScanner != null && _resourceScanners.Contains(resourceScanner) == true)
+        {
+            resourceScanner.ResourceFounded -= AddFoundResource;
+            _resourceScanners.Remove(resourceScanner);
+        }
     }
 
     public IResource GetAvailableResource()

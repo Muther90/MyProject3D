@@ -3,28 +3,32 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-[RequireComponent(typeof(ResourceStorage))]
-public class Base : MonoBehaviour
+public class Base : MonoBehaviour, ISelectable
 {
-    [SerializeField] private GlobalStorage _globalStorage;
-    [SerializeField] private List<Worker> _workers;
     [SerializeField] private WorkerRetriever _workerRetriever;
+    [SerializeField] private ResourceScanner _resourceScanner;
+    [SerializeField] private ResourceStorage _resourceStorage;
     [SerializeField] private float _delay;
+    [SerializeField] private Transform _workersSpawnPoint;
+    [SerializeField] private Flag _flag;
 
-    private ResourceStorage _resourceStorage;
+    private GlobalStorage _globalStorage;
+    private WorkerCreator _workerCreator;
+    private BaseCreator _baseCreator;
     private Vector3 _positionWorkerRetriever;
+    private Vector3 _spawnPosition;
     private Coroutine _workCoroutine;
     private Queue<Worker> _freeWorkers = new();
 
     private void Awake()
     {
-        _resourceStorage = GetComponent<ResourceStorage>();
-        _positionWorkerRetriever = _workerRetriever.transform.position;
+        _flag.gameObject.SetActive(false);
     }
 
     private void Start()
     {
-        InitializeWorkers();
+        _positionWorkerRetriever = _workerRetriever.transform.position;
+        _spawnPosition = _workersSpawnPoint.position;
         _workCoroutine = StartCoroutine(WorkCoroutine());
     }
 
@@ -38,25 +42,94 @@ public class Base : MonoBehaviour
         _workerRetriever.WorkerArrived -= ServeWorker;
     }
 
+    public void Initialize(GlobalStorage globalStorage, WorkerCreator workerCreator, BaseCreator baseCreator)
+    {
+        _globalStorage = globalStorage;
+        _globalStorage.AddResourceScanner(_resourceScanner);
+        _workerCreator = workerCreator;
+        _baseCreator = baseCreator;
+    }
+
+    public void AddWorker(Worker worker)
+    {
+        _freeWorkers.Enqueue(worker);
+        worker.transform.SetParent(_workersSpawnPoint);
+    }
+
+    public void DeployFlag(Vector3 worldPosition)
+    {
+        if (_freeWorkers.Count > 1)
+        {
+            _flag.PlaceAt(worldPosition);
+            _flag.gameObject.SetActive(true);
+        }
+    }
+
     private IEnumerator WorkCoroutine()
     {
         WaitForSeconds wait = new(_delay);
-        IResource foundResource;
 
         while (enabled)
         {
-            foundResource = _globalStorage.GetAvailableResource();
+            AssignWorkers();
 
-            if (foundResource != null && _freeWorkers.Any())
+            if (_flag.gameObject.activeSelf)
             {
-                Worker worker = _freeWorkers.Dequeue();
-                worker.CarryThing(foundResource, _positionWorkerRetriever);
+                BuildBase();
+            }
+            else
+            {
+                HireWorker();
             }
 
             yield return wait;
         }
 
         _workCoroutine = null;
+    }
+
+    private void AssignWorkers()
+    {
+        if (_freeWorkers.Any())
+        {
+            IResource foundResource = _globalStorage.GetAvailableResource();
+
+            if (foundResource != null) 
+            {
+                Worker worker = _freeWorkers.Dequeue();
+                worker.CarryThing(foundResource, _positionWorkerRetriever);
+            }
+        }
+    }
+
+    private void HireWorker()
+    {
+        if (_resourceStorage.CountResource >= _workerCreator.Cost)
+        {
+            PayFromStorage(_workerCreator.Cost);
+
+            _freeWorkers.Enqueue(_workerCreator.Create(_spawnPosition, _workersSpawnPoint));
+        }
+    }
+
+    private void BuildBase()
+    {
+        if (_resourceStorage.CountResource >= _baseCreator.Cost && _freeWorkers.Any())
+        {
+            PayFromStorage(_baseCreator.Cost);
+
+            Worker worker = _freeWorkers.Dequeue();
+            worker.BuildBase(_flag.transform.position, _baseCreator);
+            _flag.gameObject.SetActive(false);
+        }
+    }
+
+    private void PayFromStorage(int pay)
+    {
+        for (int i = 0; i < pay; i++)
+        {
+            _resourceStorage.TakeResource();
+        }
     }
 
     private void ServeWorker(Worker worker)
@@ -71,20 +144,4 @@ public class Base : MonoBehaviour
             _freeWorkers.Enqueue(worker);
         }
     }
-
-    private void InitializeWorkers()
-    {
-        foreach (Worker worker in _workers)
-        {
-            _freeWorkers.Enqueue(worker);
-        }
-    }
-
-#if UNITY_EDITOR
-    [ContextMenu("Add Child Workers")]
-    private void RefreshChildArray()
-    {
-        _workers = new List<Worker>(GetComponentsInChildren<Worker>(true));
-    }
-#endif
 }

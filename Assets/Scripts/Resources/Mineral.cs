@@ -24,7 +24,6 @@ public class Mineral : MonoBehaviour, IResource
     public void PickUp(Transform parent, Transform holdPoint)
     {
         transform.SetParent(parent);
-
         transform.SetLocalPositionAndRotation(holdPoint.localPosition, holdPoint.localRotation);
 
         _rigidbody.isKinematic = true;

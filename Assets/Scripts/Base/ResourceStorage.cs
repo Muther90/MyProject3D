@@ -3,13 +3,22 @@ using UnityEngine;
 
 public class ResourceStorage : MonoBehaviour
 {
-    private int _countResource;
+    public int CountResource { get; private set; }
 
     public event Action<int> ResourceValueChanged;
 
     public void AddResource()
     {
-        _countResource++;
-        ResourceValueChanged?.Invoke(_countResource);
+        CountResource++;
+        ResourceValueChanged?.Invoke(CountResource);
+    }
+
+    public void TakeResource()
+    {
+        if (CountResource > 0)
+        {
+            CountResource--;
+            ResourceValueChanged?.Invoke(CountResource);
+        }
     }
 }
