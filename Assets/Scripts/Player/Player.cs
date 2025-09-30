@@ -5,10 +5,10 @@ public class Player : MonoBehaviour
 {
     [SerializeField] float _moveSpeed;
     [SerializeField] private Camera _mainCamera;
+    [SerializeField] private FlagDeployer _flagDeployer;
 
     private PlayerInput _playerInput;
     private Transform _transform;
-    private ISelectable _currentSelection;
 
     private void Awake()
     {
@@ -44,32 +44,26 @@ public class Player : MonoBehaviour
 
     private void OnChoice(InputAction.CallbackContext context)
     {
-        if (_currentSelection != null)
-        {
-            _currentSelection = null;
-        }
+        _flagDeployer.ClearSelection();
 
         Ray ray = _mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
 
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            if (hit.collider.TryGetComponent<ISelectable>(out ISelectable selectable))
+            if (hit.collider.TryGetComponent<Base>(out Base selectedBase))
             {
-                _currentSelection = selectable;
+                _flagDeployer.SelectBase(selectedBase);
             }
         }
     }
 
     private void OnDeployment(InputAction.CallbackContext context)
     {
-        if (_currentSelection != null)
-        {
-            Ray ray = _mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+        Ray ray = _mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
 
-            if (Physics.Raycast(ray, out RaycastHit hit))
-            {
-                _currentSelection.DeployFlag(hit.point);
-            }
+        if (Physics.Raycast(ray, out RaycastHit hit))
+        {
+            _flagDeployer.DeployFlagAt(hit.point);
         }
     }
 }

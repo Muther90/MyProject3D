@@ -40,10 +40,9 @@ public class BaseObjectPool<T> : MonoBehaviour where T : MonoBehaviour, IPoolObj
         _activeObjects.Clear();
     }
 
-    protected void Spawn(Vector3 position, Quaternion rotation)
+    protected T Get()
     {
-        T obj = _pool.Get();
-        obj.transform.SetPositionAndRotation(position, rotation);
+        return _pool.Get();
     }
 
     private void Release(IPoolObject obj)

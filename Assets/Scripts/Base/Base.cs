@@ -3,27 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Base : MonoBehaviour, ISelectable
+public class Base : MonoBehaviour
 {
     [SerializeField] private WorkerRetriever _workerRetriever;
     [SerializeField] private ResourceScanner _resourceScanner;
     [SerializeField] private ResourceStorage _resourceStorage;
     [SerializeField] private float _delay;
     [SerializeField] private Transform _workersSpawnPoint;
-    [SerializeField] private Flag _flag;
 
     private GlobalStorage _globalStorage;
     private WorkerCreator _workerCreator;
     private BaseCreator _baseCreator;
+    private FlagDeployer _flagDeployer;
+    private Vector3? _flagPosition;
+    private bool _hasFlagDeployed;
     private Vector3 _positionWorkerRetriever;
     private Vector3 _spawnPosition;
     private Coroutine _workCoroutine;
     private Queue<Worker> _freeWorkers = new();
 
-    private void Awake()
-    {
-        _flag.gameObject.SetActive(false);
-    }
+    public bool CanDeployFlag() => _freeWorkers.Count > 1;
 
     private void Start()
     {
@@ -42,12 +41,13 @@ public class Base : MonoBehaviour, ISelectable
         _workerRetriever.WorkerArrived -= ServeWorker;
     }
 
-    public void Initialize(GlobalStorage globalStorage, WorkerCreator workerCreator, BaseCreator baseCreator)
+    public void Initialize(GlobalStorage globalStorage, WorkerCreator workerCreator, BaseCreator baseCreator, FlagDeployer flagDeployer)
     {
         _globalStorage = globalStorage;
         _globalStorage.AddResourceScanner(_resourceScanner);
         _workerCreator = workerCreator;
         _baseCreator = baseCreator;
+        _flagDeployer = flagDeployer;
     }
 
     public void AddWorker(Worker worker)
@@ -56,13 +56,10 @@ public class Base : MonoBehaviour, ISelectable
         worker.transform.SetParent(_workersSpawnPoint);
     }
 
-    public void DeployFlag(Vector3 worldPosition)
+    public void OnFlagDeployed(Vector3 worldPosition)
     {
-        if (_freeWorkers.Count > 1)
-        {
-            _flag.PlaceAt(worldPosition);
-            _flag.gameObject.SetActive(true);
-        }
+        _flagPosition = worldPosition;
+        _hasFlagDeployed = true;
     }
 
     private IEnumerator WorkCoroutine()
@@ -73,7 +70,7 @@ public class Base : MonoBehaviour, ISelectable
         {
             AssignWorkers();
 
-            if (_flag.gameObject.activeSelf)
+            if (_hasFlagDeployed)
             {
                 BuildBase();
             }
@@ -119,8 +116,11 @@ public class Base : MonoBehaviour, ISelectable
             PayFromStorage(_baseCreator.Cost);
 
             Worker worker = _freeWorkers.Dequeue();
-            worker.BuildBase(_flag.transform.position, _baseCreator);
-            _flag.gameObject.SetActive(false);
+            worker.BuildBase(_flagPosition.Value, _baseCreator);
+
+            _flagPosition = null;
+            _hasFlagDeployed = false;
+            _flagDeployer.RemoveFlagForBase(this);
         }
     }
 

@@ -597,6 +597,7 @@ MonoBehaviour:
   _heightOffset: 6
   _globalStorage: {fileID: 1851000601}
   _workerCreator: {fileID: 1023327024}
+  _flagDeployer: {fileID: 0}
 --- !u!1 &923448953
 GameObject:
   m_ObjectHideFlags: 0
@@ -747,6 +748,7 @@ GameObject:
   - component: {fileID: 963194228}
   - component: {fileID: 963194227}
   - component: {fileID: 963194230}
+  - component: {fileID: 963194231}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -834,6 +836,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveSpeed: 40
   _mainCamera: {fileID: 963194227}
+  _flagDeployer: {fileID: 963194231}
+--- !u!114 &963194231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8dea0f4e81a11144bb3653b0575d3113, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _flagCreator: {fileID: 1844341567}
 --- !u!1001 &988225409
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1130,6 +1146,7 @@ Transform:
   m_Children:
   - {fileID: 1023327023}
   - {fileID: 919019816}
+  - {fileID: 1844341566}
   m_Father: {fileID: 923448954}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1111020784 stripped
@@ -1192,6 +1209,7 @@ MonoBehaviour:
   _globalStorage: {fileID: 1851000601}
   _workerCreator: {fileID: 1023327024}
   _baseCreator: {fileID: 919019817}
+  _flagDeployer: {fileID: 963194231}
 --- !u!1 &1446169947
 GameObject:
   m_ObjectHideFlags: 0
@@ -1497,6 +1515,53 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1791055758}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1844341565
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1844341566}
+  - component: {fileID: 1844341567}
+  m_Layer: 0
+  m_Name: Flag Creator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1844341566
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1844341565}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -8.732375, y: 7.811729, z: -24.528826}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1070895734}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1844341567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1844341565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bb52331dc5a92b4dad1bba513af4de0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _prefab: {fileID: 8095451709078604479, guid: c92f2939ee204c54f8df4c4fd1a314a2, type: 3}
+  _defaultCapacity: 10
+  _maxSize: 10
 --- !u!1 &1851000599
 GameObject:
   m_ObjectHideFlags: 0

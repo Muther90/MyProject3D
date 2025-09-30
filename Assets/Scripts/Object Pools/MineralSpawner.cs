@@ -20,13 +20,14 @@ public class MineralSpawner : BaseObjectPool<Mineral>
         Vector3 spawnCenter = _spawnPoint.position;
         Vector2 randomCircle;
         Vector3 spawnPosition;
+        Mineral mineral;
 
         while (enabled)
         {
             randomCircle = Random.insideUnitCircle * _radius;
             spawnPosition = spawnCenter + new Vector3(randomCircle.x, 0, randomCircle.y);
-
-            Spawn(spawnPosition, Quaternion.identity);
+            mineral = Get();
+            mineral.transform.SetPositionAndRotation(spawnPosition, Quaternion.identity);
 
             yield return wait;
         }
