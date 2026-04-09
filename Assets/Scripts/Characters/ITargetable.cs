@@ -1,0 +1,1 @@
+public interface ITargetable : ILocatable, IDamageable {}

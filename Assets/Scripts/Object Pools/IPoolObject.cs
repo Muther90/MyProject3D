@@ -1,8 +1,6 @@
 using System;
 
-public interface IPoolObject
+public interface IPoolObject : IResetable
 {
-    event Action<IPoolObject> Taken;
-
-    void Reset();
+    event Action<IPoolObject> Returned;
 }

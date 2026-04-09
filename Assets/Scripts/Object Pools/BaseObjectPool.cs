@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class BaseObjectPool<T> : MonoBehaviour where T : MonoBehaviour, IPoolObject
+public class BaseObjectPool<T> : Pool where T : MonoBehaviour, IPoolObject
 {
     [SerializeField] private T _prefab;
     [SerializeField] private int _defaultCapacity;
@@ -14,7 +14,12 @@ public class BaseObjectPool<T> : MonoBehaviour where T : MonoBehaviour, IPoolObj
     private void Awake()
     {
         _pool = new ObjectPool<T>(
-            createFunc: () => Instantiate(_prefab),
+            createFunc: () => 
+            {
+                var instance = Instantiate(_prefab, transform);
+
+                return instance;
+            },     
             actionOnGet: (obj) => OnGetObject(obj),
             actionOnRelease: (obj) => OnReleaseObject(obj),
             actionOnDestroy: (obj) => Destroy(obj.gameObject),
@@ -24,7 +29,7 @@ public class BaseObjectPool<T> : MonoBehaviour where T : MonoBehaviour, IPoolObj
         );
     }
 
-    public virtual void Reset()
+    public override void Reset()
     {
         var objectsToReturn = new List<T>(_activeObjects);
 
@@ -32,12 +37,15 @@ public class BaseObjectPool<T> : MonoBehaviour where T : MonoBehaviour, IPoolObj
         {
             if (obj != null && obj.gameObject.activeSelf)  
             {
-                obj.Taken -= Release; 
+                obj.Returned -= Release; 
                 _pool.Release(obj);
             }
         }
+    }
 
-        _activeObjects.Clear();
+    public override IPoolObject GetGeneric()
+    {
+        return Get();
     }
 
     protected T Get()
@@ -52,15 +60,16 @@ public class BaseObjectPool<T> : MonoBehaviour where T : MonoBehaviour, IPoolObj
 
     private void OnGetObject(T obj)
     {
-        obj.Taken += Release;
         obj.gameObject.SetActive(true);
+        obj.Returned += Release;
         _activeObjects.Add(obj);
     }
 
     private void OnReleaseObject(T obj)
     {
-        obj.Taken -= Release;
         obj.gameObject.SetActive(false);
+        obj.Returned -= Release;
         _activeObjects.Remove(obj);
+        obj.Reset();
     }
 }
