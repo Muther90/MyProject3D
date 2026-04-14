@@ -10,7 +10,7 @@ public class WaveSpawner : MonoBehaviour, IResetable
     private int _toSpawn;
     private int _activeCount;
     private float _spawnInterval;
-    private ITargetable _target;
+    private TargetProvider _targetProvider;
 
     public event Action AllDied;
 
@@ -33,11 +33,11 @@ public class WaveSpawner : MonoBehaviour, IResetable
         _toSpawn = 0;
     }
 
-    public void Launch(Pool pool, int count, float interval, ITargetable target)
+    public void Launch(Pool pool, int count, float interval, TargetProvider targetProvider)
     {
         if (pool != null)
         {
-            _target = target;
+            _targetProvider = targetProvider;
             _currentPool = pool;
             _toSpawn = count;
             _spawnInterval = interval;
@@ -64,9 +64,9 @@ public class WaveSpawner : MonoBehaviour, IResetable
     {
         IPoolObject obj = _currentPool.GetGeneric();
 
-        if (obj is IInitializable<ITargetable> initializable)
+        if (obj is IInitializable<TargetProvider> initializable)
         {
-            initializable.Initialize(_target);
+            initializable.Initialize(_targetProvider);
         }
 
         MonoBehaviour monoObj = obj as MonoBehaviour;

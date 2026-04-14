@@ -6,38 +6,32 @@ public class WeaponAmmoUI : WeaponUI
     [SerializeField] private GameObject _container;
     [SerializeField] private TextMeshProUGUI _ammoText;
 
-    private IWeaponAmmo _weaponAmmo;
+    private WeaponAmmoInfo _ammoInfo;
 
     protected override void OnWeaponChanged(Weapon weapon)
     {
-        if (weapon is IWeaponAmmo weaponAmmo)
+        OnUnsubscribe();
+
+        if (weapon != null && weapon.TryGetComponent<WeaponAmmoInfo>(out WeaponAmmoInfo ammoInfo))
         {
-            _weaponAmmo = weaponAmmo;
-            _weaponAmmo.AmmoChanged += UpdateAmmoText;
-
-            if (_container != null) 
-            { 
-                _container.SetActive(true); 
-            }
-
-            UpdateAmmoText(_weaponAmmo.CurrentAmmo, _weaponAmmo.MaxAmmo);
+            _ammoInfo = ammoInfo;
+            _ammoInfo.AmmoChanged += UpdateAmmoText;
+            _container.SetActive(true);
+            UpdateAmmoText(_ammoInfo.CurrentAmmo, _ammoInfo.MaxAmmo);
         }
         else
         {
-            if (_container != null)
-            {
-                _container.SetActive(false);
-                _weaponAmmo = null;
-            }
+            _container.SetActive(false);
+            _ammoInfo = null;
         }
     }
 
     protected override void OnUnsubscribe()
     {
-        if (_weaponAmmo != null)
+        if (_ammoInfo != null)
         {
-            _weaponAmmo.AmmoChanged -= UpdateAmmoText;
-            _weaponAmmo = null;
+            _ammoInfo.AmmoChanged -= UpdateAmmoText;
+            _ammoInfo = null;
         }
     }
 

@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Wave3
   m_EditorClassIdentifier: 
   phases:
-  - poolType: 0
-    count: 3
-    spawnInterval: 0.4
-  - poolType: 1
-    count: 1
-    spawnInterval: 1
+  - PoolType: 0
+    Count: 3
+    SpawnInterval: 0
+  - PoolType: 1
+    Count: 1
+    SpawnInterval: 0

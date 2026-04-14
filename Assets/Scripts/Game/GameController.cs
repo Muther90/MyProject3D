@@ -1,9 +1,9 @@
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameController : MonoBehaviour
 {
     [SerializeField] private Player _player;
-    [SerializeField] private WaveManager _waveManager;
+    [SerializeField] private WaveController _waveController;
     [SerializeField] private NotificationScreen _gameVictoryScreen;
     [SerializeField] private NotificationScreen _gameOverScreen;
 
@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
         _player.Died += PlayerDie;
         _gameOverScreen.ButtonClicked += Restart;
         _gameVictoryScreen.ButtonClicked += Restart;
-        _waveManager.AllWavesCompleted += Victory;
+        _waveController.AllWavesCompleted += Victory;
     }
 
     private void OnDisable()
@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
         _player.Died -= PlayerDie;
         _gameOverScreen.ButtonClicked -= Restart;
         _gameVictoryScreen.ButtonClicked -= Restart;
-        _waveManager.AllWavesCompleted -= Victory;
+        _waveController.AllWavesCompleted -= Victory;
     }
 
     private void PlayerDie()
@@ -36,13 +36,12 @@ public class GameManager : MonoBehaviour
         EnableCursor();
     }
 
-
     private void Restart()
     {
         Time.timeScale = 1;
 
         _player.Reset();
-        _waveManager.Reset();
+        _waveController.Reset();
 
         DisableCursor();
     }

@@ -3,17 +3,17 @@ using UnityEngine;
 
 public class WaveUI : MonoBehaviour
 {
-    [SerializeField] private WaveManager _waveManager;
+    [SerializeField] private WaveController _waveController;
     [SerializeField] private TextMeshProUGUI _countWaveText;
 
     private void OnEnable()
     {
-        _waveManager.WaveChanged += UpdateText;
+        _waveController.WaveChanged += UpdateText;
     }
 
     private void OnDisable()
     {
-        _waveManager.WaveChanged -= UpdateText;
+        _waveController.WaveChanged -= UpdateText;
     }
 
     private void UpdateText(int current, int total)

@@ -4,9 +4,9 @@ public class Boss : Enemy
 {
     [SerializeField] private RamAttack _ramAttack;
 
-    public override void Initialize(ITargetable target)
+    public override void Initialize(TargetProvider targetProvider)
     {
-        base.Initialize(target);
-        _ramAttack.Initialize(_target);
+        base.Initialize(targetProvider);
+        _ramAttack.Initialize(targetProvider);
     }
 }

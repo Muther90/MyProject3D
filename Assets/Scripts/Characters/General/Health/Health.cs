@@ -3,28 +3,26 @@ using UnityEngine;
 
 public class Health : MonoBehaviour, IResetable
 {
-    [SerializeField] private float _maxPoints;
-    [SerializeField] private float _currentPoints;
-    public float CurrentPoints => _currentPoints;
-    public float MaxPoints => _maxPoints;
+    [field: SerializeField] public float MaxPoints { get; private set; }
+    [field: SerializeField] public float CurrentPoints { get; private set; }
 
     public event Action<float, float> ValueChanged;
     public event Action Died;
 
     public void Reset()
     {
-        _currentPoints = _maxPoints;
-        ValueChanged?.Invoke(_currentPoints, _maxPoints);
+        CurrentPoints = MaxPoints;
+        ValueChanged?.Invoke(CurrentPoints, MaxPoints);
     }
 
     public void ApplyDamage(float damage)
     {
         if (IsPositiveValue(damage))
         {
-            _currentPoints -= damage;
-            ValueChanged?.Invoke(_currentPoints, _maxPoints);
+            CurrentPoints -= damage;
+            ValueChanged?.Invoke(CurrentPoints, MaxPoints);
 
-            if (_currentPoints <= 0)
+            if (CurrentPoints <= 0)
             {
                 Died?.Invoke();
             }
@@ -35,8 +33,8 @@ public class Health : MonoBehaviour, IResetable
     {
         if (IsPositiveValue(heal))
         {
-            _currentPoints = Mathf.Min(_currentPoints + heal, _maxPoints);
-            ValueChanged?.Invoke(_currentPoints, _maxPoints);
+            CurrentPoints = Mathf.Min(CurrentPoints + heal, MaxPoints);
+            ValueChanged?.Invoke(CurrentPoints, MaxPoints);
         }
     }
 

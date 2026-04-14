@@ -22,13 +22,11 @@ public class RadiusAttack : MonoBehaviour
 
             if (hit.TryGetComponent(out IDamageable damageable))
             {
-                if (damageable == target)
+                IDamageable validTarget = TargetValidator.GetValidTarget(damageable, target);
+
+                if (validTarget != null)
                 {
-                    target.TakeDamage(_damage);
-                }
-                else if (damageable is DamageReceiver damageReceiver && damageReceiver.Owner == target)
-                {
-                    damageable.TakeDamage(_damage);
+                    validTarget.TakeDamage(_damage);
                 }
             }
         }

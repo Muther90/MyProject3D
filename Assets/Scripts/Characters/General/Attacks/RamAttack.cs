@@ -1,13 +1,13 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
 
-public class RamAttack : MonoBehaviour, IInitializable<ITargetable>
+public class RamAttack : MonoBehaviour, IInitializable<TargetProvider>
 {
     [SerializeField, Min(0)] private float _damage = 50f;
     [SerializeField, Min(0)] private float _hitCooldown = 0.5f;
 
     private Coroutine _cooldownCoroutine;
-    private ITargetable _target;
+    private TargetProvider _targetProvider;
     private bool _canAttack;
 
     private void OnEnable()
@@ -24,25 +24,24 @@ public class RamAttack : MonoBehaviour, IInitializable<ITargetable>
         }
     }
 
-    public void Initialize(ITargetable target)
+    public void Initialize(TargetProvider targetProvider)
     {
-        _target = target;
+        _targetProvider = targetProvider;
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         if (_canAttack)
         {
+            IDamageable currentTarget = _targetProvider.CurrentTarget;
+
             if (collision.gameObject.TryGetComponent(out IDamageable damageable))
             {
-                if (damageable == _target)
+                IDamageable validTarget = TargetValidator.GetValidTarget(damageable, _targetProvider.CurrentTarget);
+
+                if (validTarget != null)
                 {
-                    _target.TakeDamage(_damage);
-                    StartHitCooldown();
-                }
-                else if (damageable is DamageReceiver damageReceiver && damageReceiver.Owner == _target)
-                {
-                    damageable.TakeDamage(_damage);
+                    validTarget.TakeDamage(_damage);
                     StartHitCooldown();
                 }
             }

@@ -1,34 +1,26 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WaveManager : MonoBehaviour, IResetable
+public class WaveController : MonoBehaviour, IResetable
 {
     [SerializeField] private WaveSpawner _spawner;
     [SerializeField] private List<WaveData> _waves;
     [SerializeField] private Pool _mobPool;
     [SerializeField] private Pool _bossPool;
-    [SerializeField] private MonoBehaviour _targetBase;
+    [SerializeField] private TargetProvider _targetProvider;
     [SerializeField, Min(0f)] private float _nextWaveDelay;
 
     private int _currentWaveIndex = 0;
     private int _currentPhaseIndex = 0;
-    private ITargetable _target;
+    private Coroutine _startWaveCoroutine;
 
     public event Action<int, int> WaveChanged;
     public event Action AllWavesCompleted;
 
-    private void Start()
-    {
-        _target = _targetBase as ITargetable;
-
-        if (_target == null)
-        {
-            Debug.LogError("[WaveManager] Target object does not implement ITargetable!");
-
-            return;
-        }
-
+    private void Start() 
+    { 
         StartNextWave();
     }
 
@@ -49,14 +41,29 @@ public class WaveManager : MonoBehaviour, IResetable
         _mobPool.Reset();
         _bossPool.Reset();
 
-        Invoke(nameof(StartNextWave), _nextWaveDelay);
+        if (_startWaveCoroutine != null)
+        {
+            StopCoroutine(_startWaveCoroutine);
+            _startWaveCoroutine = null;
+        }
+
+        _startWaveCoroutine = StartCoroutine(DelayedStartWaveCoroutine());
+    }
+
+    private IEnumerator DelayedStartWaveCoroutine()
+    {
+        yield return new WaitForSeconds(_nextWaveDelay);
+
+        StartNextWave();
+        _startWaveCoroutine = null;
     }
 
     private void PhaseCompleted()
     {
-        if (_currentPhaseIndex + 1 < _waves[_currentWaveIndex].phases.Length)
+        _currentPhaseIndex++;
+
+        if (_currentPhaseIndex < _waves[_currentWaveIndex].phases.Length)
         {
-            _currentPhaseIndex++;
             StartCurrentPhase();
         }
         else
@@ -67,7 +74,7 @@ public class WaveManager : MonoBehaviour, IResetable
 
     private void StartNextWave()
     {
-        if (_waves.Count > 0)
+        if (0 < _waves.Count)
         {
             _currentPhaseIndex = 0;
             WaveData wave = _waves[_currentWaveIndex];
@@ -81,8 +88,8 @@ public class WaveManager : MonoBehaviour, IResetable
         WaveData currentWave = _waves[_currentWaveIndex];
         WaveData.WavePhase phase = currentWave.phases[_currentPhaseIndex];
 
-        Pool pool = phase.poolType == WaveData.PoolType.Mob ? _mobPool : _bossPool;
-        _spawner.Launch(pool, phase.count, phase.spawnInterval, _target);
+        Pool pool = phase.PoolType == WaveData.PoolType.Mob ? _mobPool : _bossPool;
+        _spawner.Launch(pool, phase.Count, phase.SpawnInterval, _targetProvider);
     }
 
     private void FinishWave()

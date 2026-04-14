@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Wave1
   m_EditorClassIdentifier: 
   phases:
-  - poolType: 0
-    count: 1
-    spawnInterval: 1
+  - PoolType: 0
+    Count: 1
+    SpawnInterval: 1

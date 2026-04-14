@@ -2,22 +2,19 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class RangedWeapon : Weapon, IWeaponAmmo, IWeaponReloadable
+public class RangedWeapon : Weapon
 {
     [SerializeField] private RangedWeaponData _data;
-    [SerializeField] private WeaponRaycaster _weaponRaycaster;
+    [SerializeField] private WeaponAmmoInfo _ammoInfo;
+    [SerializeField] private WeaponReloadInfo _reloadInfo;
 
     private int _currentAmmo;
     private bool _isReloading;
     private Coroutine _reloadCoroutine;
 
-    public override WeaponData Data => _data;
-    public int CurrentAmmo => _currentAmmo;
-    public int MaxAmmo => _data.MagazineSize; 
-    public bool IsReloading => _isReloading;
+    public event Action<float, float> Shot;
 
-    public event Action<int, int> AmmoChanged;
-    public event Action<bool> ReloadingStateChanged;
+    public override WeaponData Data => _data;
 
     private void Start()
     {
@@ -31,10 +28,7 @@ public class RangedWeapon : Weapon, IWeaponAmmo, IWeaponReloadable
         UpdateAmmoUI();
     }
 
-    private void OnDisable()
-    {
-        StopReload();
-    }
+    private void OnDisable() => StopReload();
 
     public override void Reset()
     {
@@ -52,25 +46,25 @@ public class RangedWeapon : Weapon, IWeaponAmmo, IWeaponReloadable
                 _currentAmmo--;
                 UpdateAmmoUI();
 
-                _weaponRaycaster.PerformRaycast(_data.Damage, _data.Range);
+                Shot.Invoke(_data.Damage, _data.Range);
             }
             else
             {
-                _reloadCoroutine = StartCoroutine(ReloadRoutine());
+                _reloadCoroutine = StartCoroutine(ReloadCoroutine());
             }
         }
     }
 
-    private IEnumerator ReloadRoutine()
+    private IEnumerator ReloadCoroutine()
     {
         _isReloading = true;
-        ReloadingStateChanged?.Invoke(true);
+        _reloadInfo.SetReloading(true);
 
         yield return new WaitForSeconds(_data.ReloadTime);
 
         _currentAmmo = _data.MagazineSize;
         _isReloading = false;
-        ReloadingStateChanged?.Invoke(false);
+        _reloadInfo.SetReloading(false);
         UpdateAmmoUI();
 
         _reloadCoroutine = null;
@@ -78,7 +72,7 @@ public class RangedWeapon : Weapon, IWeaponAmmo, IWeaponReloadable
 
     private void UpdateAmmoUI()
     {
-        AmmoChanged?.Invoke(_currentAmmo, _data.MagazineSize);
+        _ammoInfo.SetAmmo(_currentAmmo, _data.MagazineSize);
     }
 
     private void StopReload()
@@ -90,6 +84,6 @@ public class RangedWeapon : Weapon, IWeaponAmmo, IWeaponReloadable
         }
 
         _isReloading = false;
-        ReloadingStateChanged?.Invoke(false);
+        _reloadInfo.SetReloading(false);
     }
 }

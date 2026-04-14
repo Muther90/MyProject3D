@@ -1789,7 +1789,7 @@ Transform:
   m_GameObject: {fileID: 1010470086}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9.1, y: 14.14, z: -137.24}
+  m_LocalPosition: {x: -9.1, y: 14.33, z: -136.17}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2394,7 +2394,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cd9b936d65004e48957ef37020b750c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _waveManager: {fileID: 1474818680}
+  _waveController: {fileID: 1474818682}
   _countWaveText: {fileID: 1146775491}
 --- !u!1 &1225914890
 GameObject:
@@ -2674,7 +2674,7 @@ Transform:
   m_GameObject: {fileID: 1403791087}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -7.2, y: 0.9, z: -601.7}
+  m_LocalPosition: {x: -7, y: 2.4, z: -588.33}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2726,6 +2726,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _camera: {fileID: 963194227}
+  _weaponHandler: {fileID: 445310164}
 --- !u!114 &1403791092
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2794,8 +2795,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d94951e3e58c9fb44baab244169204ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 100
-  _currentPoints: 100
+  <MaxPoints>k__BackingField: 100
+  <CurrentPoints>k__BackingField: 100
 --- !u!1 &1456652034
 GameObject:
   m_ObjectHideFlags: 0
@@ -2838,35 +2839,15 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1474818681}
-  - component: {fileID: 1474818680}
+  - component: {fileID: 1474818682}
+  - component: {fileID: 1474818683}
   m_Layer: 0
-  m_Name: Wave Manager
+  m_Name: Wave Controller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1474818680
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1474818679}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c94f0467ab23c246a0d4eb00c6b5738, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _spawner: {fileID: 2012085382}
-  _waves:
-  - {fileID: 11400000, guid: d9d34f17c976c6d4ca1beaf1dfe5dd9b, type: 2}
-  - {fileID: 11400000, guid: 5ce7c3201f9f0ca4290a08f157fa50af, type: 2}
-  - {fileID: 11400000, guid: 98c589fe0ac485240b3fb038bbaeef06, type: 2}
-  _mobPool: {fileID: 1296754775}
-  _bossPool: {fileID: 499044826}
-  _targetBase: {fileID: 1403791089}
-  _nextWaveDelay: 0
 --- !u!4 &1474818681
 Transform:
   m_ObjectHideFlags: 0
@@ -2884,6 +2865,40 @@ Transform:
   - {fileID: 1456652035}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1474818682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1474818679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89157676a095f39488c92ddd6b151855, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _spawner: {fileID: 2012085382}
+  _waves:
+  - {fileID: 11400000, guid: d9d34f17c976c6d4ca1beaf1dfe5dd9b, type: 2}
+  - {fileID: 11400000, guid: 5ce7c3201f9f0ca4290a08f157fa50af, type: 2}
+  - {fileID: 11400000, guid: 98c589fe0ac485240b3fb038bbaeef06, type: 2}
+  _mobPool: {fileID: 1296754775}
+  _bossPool: {fileID: 499044826}
+  _targetProvider: {fileID: 1474818683}
+  _nextWaveDelay: 1
+--- !u!114 &1474818683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1474818679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3958feb1aa521364499a1e7ae2e5779b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _targetBase: {fileID: 1403791089}
 --- !u!1 &1483681802
 GameObject:
   m_ObjectHideFlags: 0
@@ -3879,7 +3894,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 1403791089}
-  _waveManager: {fileID: 1474818680}
+  _waveController: {fileID: 1474818682}
   _gameVictoryScreen: {fileID: 739032192}
   _gameOverScreen: {fileID: 1225914894}
 --- !u!4 &2054202243
@@ -3891,7 +3906,7 @@ Transform:
   m_GameObject: {fileID: 2054202241}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.9182215, y: 4.197676, z: -583.5615}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

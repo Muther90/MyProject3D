@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4116904768975751621}
   - component: {fileID: 3847559474263758755}
+  - component: {fileID: 8987754994532575544}
+  - component: {fileID: -2717909089917003286}
   m_Layer: 0
   m_Name: Rifle
   m_TagString: Untagged
@@ -46,8 +48,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _data: {fileID: 11400000, guid: ee675f95d5d2e894db5932fdbf437285, type: 2}
-  _weaponRaycaster: {fileID: 0}
-  _shootEffect: {fileID: 0}
+  _ammoInfo: {fileID: 8987754994532575544}
+  _reloadInfo: {fileID: -2717909089917003286}
+--- !u!114 &8987754994532575544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5663647343314129952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f30ce397e9606df41b1db4950c4673d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-2717909089917003286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5663647343314129952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 739334b11eb255f48a6d5cd76d65463b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8204625383416452765
 GameObject:
   m_ObjectHideFlags: 0

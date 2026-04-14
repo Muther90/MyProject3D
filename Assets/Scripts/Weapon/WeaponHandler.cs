@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class WeaponHandler : MonoBehaviour, IResetable
 {
-    [SerializeField] private int _startWeaponIndex = 0;
+    [SerializeField, Min(0)] private int _startWeaponIndex = 0;
 
     private int _currentWeaponIndex;
     private readonly List<Weapon> _weapons = new();
 
-    public Weapon CurrentWeapon => _weapons[_currentWeaponIndex];
-
     public event Action<Weapon> WeaponChanged;
+
+    public Weapon CurrentWeapon => _weapons[_currentWeaponIndex];
 
     private void Awake()
     {

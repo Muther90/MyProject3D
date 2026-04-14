@@ -30,10 +30,10 @@ public class Mob : Enemy
         _jumper.Reset();
     }
 
-    public override void Initialize(ITargetable target)
+    public override void Initialize(TargetProvider targetProvider)
     {
-        base.Initialize(target);
-        _distanceDetector.Initialize(_target);
+        base.Initialize(targetProvider);
+        _distanceDetector.Initialize(targetProvider);
     }
 
     private void StartJumpAttack()
@@ -48,13 +48,13 @@ public class Mob : Enemy
 
     private void JumpTo()
     {
-        _jumper.JumpTo(_target.Position);
+        _jumper.JumpTo(_targetProvider.CurrentTarget.Position);
         _collisionDetector.StartDetect(OnCollide);
     }
 
     private void OnCollide()
     {
-        _radiusAttack.TryDealDamage(_target);
+        _radiusAttack.TryDealDamage(_targetProvider.CurrentTarget);
         _isAttacking = false;
         EnableMovement();
     }

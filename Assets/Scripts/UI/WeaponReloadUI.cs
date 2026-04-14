@@ -4,41 +4,36 @@ public class WeaponReloadUI : WeaponUI
 {
     [SerializeField] private GameObject _reloadIndicator;
 
-    private IWeaponReloadable _weaponReloadable;
+    private WeaponReloadInfo _reloadInfo;
 
     protected override void OnWeaponChanged(Weapon weapon)
     {
-        if (weapon is IWeaponReloadable weaponReloadable)
-        {
-            _weaponReloadable = weaponReloadable;
-            _weaponReloadable.ReloadingStateChanged += UpdateReloadState;
+        OnUnsubscribe();
 
-            UpdateReloadState(_weaponReloadable.IsReloading);
+        if (weapon != null && weapon.TryGetComponent<WeaponReloadInfo>(out WeaponReloadInfo reloadInfo))
+        {
+            _reloadInfo = reloadInfo;
+            _reloadInfo.ReloadingStateChanged += UpdateReloadState;
+            UpdateReloadState(_reloadInfo.IsReloading);
         }
         else
         {
-            if (_reloadIndicator != null)
-            {
-                _reloadIndicator.SetActive(false);
-                _weaponReloadable = null;
-            }
+            _reloadIndicator.SetActive(false);
+            _reloadInfo = null;
         }
     }
 
     protected override void OnUnsubscribe()
     {
-        if (_weaponReloadable != null)
+        if (_reloadInfo != null)
         {
-            _weaponReloadable.ReloadingStateChanged -= UpdateReloadState;
-            _weaponReloadable = null;
+            _reloadInfo.ReloadingStateChanged -= UpdateReloadState;
+            _reloadInfo = null;
         }
     }
 
     private void UpdateReloadState(bool isReloading)
     {
-        if (_reloadIndicator != null)
-        { 
-            _reloadIndicator.SetActive(isReloading);
-        }
+        _reloadIndicator.SetActive(isReloading);
     }
 }

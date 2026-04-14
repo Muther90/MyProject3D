@@ -4,20 +4,18 @@ public class DamageReceiver : MonoBehaviour, IDamageable
 {
     [SerializeField] private float _damageMultiplier;
 
-    private IDamageable _owner;
-
-    public IDamageable Owner => _owner;
+    public IDamageable Owner { get; private set; }
 
     private void Awake()
     {
         if (transform.parent != null)
         {
-            _owner = transform.parent.GetComponentInParent<IDamageable>();
+            Owner = transform.parent.GetComponentInParent<IDamageable>();
         }
     }
 
     public void TakeDamage(float amount)
     {
-        _owner?.TakeDamage(amount * _damageMultiplier);
+        Owner.TakeDamage(amount * _damageMultiplier);
     }
 }

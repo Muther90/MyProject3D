@@ -84,8 +84,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mover: {fileID: -1407412539302407591}
-  _watcher: {fileID: 1096032680835867124}
   _health: {fileID: 2352798084796952964}
+  _watcher: {fileID: 1096032680835867124}
   _shaker: {fileID: 8435758940551723193}
   _jumper: {fileID: 3541591748680123603}
   _distanceDetector: {fileID: -9072220279968954556}
@@ -117,8 +117,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d94951e3e58c9fb44baab244169204ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 20
-  _currentPoints: 20
+  <MaxPoints>k__BackingField: 20
+  <CurrentPoints>k__BackingField: 20
 --- !u!114 &8435758940551723193
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -179,8 +179,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76846832c1962f84e89bdba0b1a50a83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rotationSpeedDegree: 10
-  _updateInterval: 0.5
+  _rotationSpeedDegree: 80
+  _updateInterval: 0.1
 --- !u!114 &4729111837946871846
 MonoBehaviour:
   m_ObjectHideFlags: 0

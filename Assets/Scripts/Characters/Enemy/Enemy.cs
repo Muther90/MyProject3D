@@ -1,13 +1,13 @@
 using System;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour, IDamageable, IPoolObject, IInitializable<ITargetable>, IResetable
+public class Enemy : MonoBehaviour, IDamageable, IPoolObject, IInitializable<TargetProvider>, IResetable
 {
     [SerializeField] private Mover _mover;
-    [SerializeField] private Watcher _watcher;
     [SerializeField] private Health _health;
+    [SerializeField] private Watcher _watcher;
 
-    protected ITargetable _target;
+    protected TargetProvider _targetProvider;
     protected bool _canMove;
 
     public event Action<IPoolObject> Returned;
@@ -15,31 +15,19 @@ public class Enemy : MonoBehaviour, IDamageable, IPoolObject, IInitializable<ITa
     protected virtual void OnEnable()
     {
         _canMove = true;
-
         _health.Died += Died;
-
-        if (_target != null)
-        {
-            _watcher.SetTarget(_target);
-            _watcher.StartWatching();
-        }
     }
 
     protected virtual void OnDisable()
     {
         _health.Died -= Died;
-
-        if (_target != null)
-        {
-            _watcher.StopWatching();
-        }
     }
 
     protected virtual void FixedUpdate()
     {
-        if (_canMove && _target != null)
+        if (_canMove && _targetProvider.CurrentTarget != null)
         {
-            _mover.MoveTo(_target.Position - transform.position);
+            _mover.MoveTo(_targetProvider.CurrentTarget.Position - transform.position);
         }
     }
 
@@ -47,15 +35,14 @@ public class Enemy : MonoBehaviour, IDamageable, IPoolObject, IInitializable<ITa
     {
         _mover.Reset();
         _health.Reset();
-        _target = null;
+        _targetProvider = null;
         _canMove = true;
     }
 
-    public virtual void Initialize(ITargetable target)
+    public virtual void Initialize(TargetProvider targetProvider)
     {
-        _target = target;
-        _watcher.SetTarget(_target);
-        _watcher.StartWatching();
+        _targetProvider = targetProvider;
+        _watcher.Initialize(_targetProvider);
     }
 
     public virtual void TakeDamage(float amount)

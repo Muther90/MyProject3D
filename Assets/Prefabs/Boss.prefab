@@ -123,8 +123,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d94951e3e58c9fb44baab244169204ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPoints: 50
-  _currentPoints: 50
+  <MaxPoints>k__BackingField: 50
+  <CurrentPoints>k__BackingField: 50
 --- !u!114 &3283984419137577282
 MonoBehaviour:
   m_ObjectHideFlags: 0

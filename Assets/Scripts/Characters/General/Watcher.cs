@@ -1,50 +1,29 @@
 using System.Collections;
 using UnityEngine;
 
-public class Watcher : MonoBehaviour
+public class Watcher : MonoBehaviour, IInitializable<TargetProvider>
 {
     private const float MinSqrMagnitude = 0.0001f;
 
     [SerializeField, Min(0f)] private float _rotationSpeedDegree;
     [SerializeField, Range(0.01f, 0.5f)] private float _updateInterval = 0.05f;
 
-    private ILocatable _target;
+    private TargetProvider _targetProvider;
     private Coroutine _watchCoroutine;
 
-    private void OnEnable()
-    {
-        if (_target != null && _watchCoroutine == null)
-        {
-            _watchCoroutine = StartCoroutine(WatchCoroutine());
-        }
-    }
-
     private void OnDisable()
-    {
-        StopWatching();
-    }
-
-    public void SetTarget(ILocatable target)
-    {
-        _target = target;
-    }
-
-    public void StartWatching()
-    {
-        if (_target != null)
-        {
-            StopWatching();
-            _watchCoroutine = StartCoroutine(WatchCoroutine());
-        }
-    }
-
-    public void StopWatching()
     {
         if (_watchCoroutine != null)
         {
             StopCoroutine(_watchCoroutine);
             _watchCoroutine = null;
         }
+    }
+
+    public void Initialize(TargetProvider targetProvider)
+    {
+        _targetProvider = targetProvider;
+        _watchCoroutine = StartCoroutine(WatchCoroutine());
     }
 
     private IEnumerator WatchCoroutine()
@@ -54,9 +33,9 @@ public class Watcher : MonoBehaviour
         Quaternion targetRot;
         Vector3 direction;
 
-        while (_target != null)
+        while (_targetProvider.CurrentTarget != null)
         {
-            direction = _target.Position - transform.position;
+            direction = _targetProvider.CurrentTarget.Position - transform.position;
             direction.y = 0f;
 
             if (direction.sqrMagnitude > MinSqrMagnitude)

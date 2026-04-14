@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Knife
   m_EditorClassIdentifier: 
   WeaponName: Knife
-  Damage: 10
+  Damage: 15
   OverrideController: {fileID: 22100000, guid: ffa8b496a5a75464eadd19514424ebb0, type: 2}
